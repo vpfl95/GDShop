@@ -43,7 +43,56 @@ body {
 }
 
 .board_list {
-  border-bottom: solid 1px lightgray;
-  height: 80px;
+ /*  border-bottom: solid 1px lightgray; */
+  height: 480px;
   width: 80%;
+}
+
+#title{
+  display: flex; 
+  /* flex-flow: row wrap; */
+  justify-content: space-between;
+  border-bottom: solid 1px lightgray;
+}
+
+#list a {
+  text-decoration: none;
+  color: black;
+}
+
+tr.colored:hover td{
+
+  background-color:#f3e9e9 !important;
+
+  color:#303f39 !important;
+
+}
+
+.file_drag{
+  margin-top: 7px;
+  padding: 19px 10px;
+  border: 1px solid #e6e6ea;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #767678;
+  color: var(--color-sub-info-1);
+  line-height: 20px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+#files{
+  border-bottom: solid 1px lightgray;
+}
+
+.file_list_header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.fileItem{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
