@@ -19,7 +19,7 @@ pageEncoding="UTF-8"%>
     <link rel="stylesheet" href="../css/login.css" />
     <link rel="stylesheet" href="../css/board.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script defer src="/js/notice.js"></script>
+    <script defer src="/js/notice/notice.js"></script>
      <!-- include summernote css/js-->
 	 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 	 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
@@ -52,9 +52,10 @@ pageEncoding="UTF-8"%>
             <div class="board_top p-3 mt-3 mb-3">Write Page</div>
 
             <form action="write" method="post" enctype="multipart/form-data">
+           
                 <div style="width: 100%;">
                     <input type="text" style="width: 100%;" id="title" name="title" placeholder="제목을 입력하세요">
-                    <input type="text" style="width: 100%;" id="id" name="id" value="manager">
+                    <input type="text" style="width: 100%;" id="id" name="id" value="admin">
                 </div>
                 <div>
                     <input  type="file" name="files" id="files" class="files form-control form-control-sm" multiple>

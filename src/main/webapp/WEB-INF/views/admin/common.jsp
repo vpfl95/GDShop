@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +24,45 @@ pageEncoding="UTF-8"%>
                 <td>${memberVO.name}</td>
                 <td>${memberVO.email}</td>
                 <td>${memberVO.point}</td>
-                <td>${memberVO.roleName}</td>
+                <td onclick="roleDetail(this)" data-bs-toggle="modal" data-bs-target="#roleModal">
+                    <div>
+                        <c:if test="${memberVO.cnt==1}">
+                            <c:forEach items="${memberVO.roleVOs}" var="roleVO">
+                                <div data-rolenum="${roleVO.roleNum}">${fn:split(roleVO.roleName,'_')[1]}</div>
+                            </c:forEach>  
+                        </c:if>
+                        <c:if test="${memberVO.cnt==2}">
+                            <c:forEach items="${memberVO.roleVOs}" var="roleVO">
+                                <div data-rolenum="${roleVO.roleNum}">${fn:split(roleVO.roleName,'_')[1]}</div>
+                            </c:forEach> 
+                                <div data-rolenum="4">MEMBER</div> 
+                        </c:if>
+                        <c:if test="${memberVO.cnt==3}">
+                            <c:if test="${memberVO.sum==7}">
+                                <c:forEach items="${memberVO.roleVOs}" var="roleVO">
+                                    <div data-rolenum="${roleVO.roleNum}">${fn:split(roleVO.roleName,'_')[1]}</div>
+                                </c:forEach>
+                                <div data-rolenum="2">SELLER</div>
+                                <div data-rolenum="4">MEMBER</div>    
+                            </c:if>
+                            <c:if test="${memberVO.sum gt 7 && memberVO.sum lt 10}">
+                                <c:forEach items="${memberVO.roleVOs}" var="roleVO">
+                                    <div data-rolenum="${roleVO.roleNum}">${fn:split(roleVO.roleName,'_')[1]}</div>
+                                </c:forEach>
+                                <div data-rolenum="3">VIP</div>
+                                <div data-rolenum="4">MEMBER</div>    
+                            </c:if>
+                        </c:if>
+                        <c:if test="${memberVO.cnt==4}">
+                            <c:forEach items="${memberVO.roleVOs}" var="roleVO">
+                                <div data-rolenum="${roleVO.roleNum}">${fn:split(roleVO.roleName,'_')[1]}</div>
+                                <div data-rolenum="2">SELLER</div>
+                                <div data-rolenum="3">VIP</div>
+                                <div data-rolenum="4">MEMBER</div>      
+                            </c:forEach>  
+                        </c:if>
+                    </div>
+                </td>
                 <td><button data-bs-toggle="modal" data-bs-target="#missionModal">미션</button></td>
                 <td>${memberVO.status}</td>
             </tr>

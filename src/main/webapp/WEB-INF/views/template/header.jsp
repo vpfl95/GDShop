@@ -2,28 +2,27 @@
 pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core"
 prefix="c" %>
-    <nav class="navbar navbar-expand-lg header">
-      <div class="container-fluid" style="padding: 0px">
-        <a class="navbar-brand" href="/" style="margin-right: 1.2em"
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+    <nav class="navbar navbar-expand-lg header" style="padding: 6px;">
+      <div class="container-fluid" style="padding: 0px; width: 68%">
+        <a class="navbar-brand" href="/" style="margin-right: 2em"
           ><img
             src="/images/h.png"
             alt="Logo"
-            width="169"
-            height="62"
+            width="170"
+            height="60"
             class="d-inline-block align-text-top"/></a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item tab0  ps-3 pe-3"><a href="/">홈</a></li>
             <li class="nav-item tab1 ps-3 pe-3"><a href="/tab/tab1">추첨형</a></li>
             <li class="nav-item tab2 ps-3 pe-3"><a href="/tab/tab2">즉석추첨형</a></li>
-            <li class="nav-item tab3 ps-3 pe-3"><a href="/tab/tab3">초간단미션</a></li>
+            <li class="nav-item tab3 ps-3 pe-3"><a href="/tab/tab3">SNS미션</a></li>
             <li class="nav-item tab4 ps-3 pe-3"><a href="/tab/tab4">프리미엄</a></li>
           </ul>
           <div class="d-flex">
           
-          <a href="/item/add" class="btn btn-success">상품등록</a>
-          
-          <c:if test="${empty member}">
+          <sec:authorize access="!isAuthenticated()">
             <a
               href="#"
               class="btn btn-outline-success"
@@ -48,40 +47,27 @@ prefix="c" %>
               "
               href="/membership/membership"
               >Premium</a
-            ></c:if>
+            ></sec:authorize>
             <!-- 로그인후 해당 블록 보이기 -->
-            <c:if test="${not empty member}">
+            <sec:authorize access="isAuthenticated()">
             <div class="me-3">
-              <b style="font-size: 17.5px; color: rgb(9, 118, 31)">${member.id}</b>님
+              <b id="id1" style="font-size: 17.5px; color: rgb(9, 118, 31)"><sec:authentication property="Principal" var="user"/>${user.id}</b>님
               환영합니다!💚
             </div>
-<!--             <div class="me-3 log">
-              <a href="#"><b>내캠페인</b></a>
-            </div>
-            <div class="me-3 log">
-              <a href="#"><b>상품등록</b></a>
-            </div>
-            <div class="me-3 log">
-              <a href="/member/mypage"><b>마이페이지</b></a>
-            </div> -->
             
             <div class="top-dropdown">
-		      <div class="me-3 log">
+		      <div class="log">
               <a href="/member/mypage"><b>마이페이지</b></a>
            	  </div>
 		      <div class="dropdown-content">
-		      	<c:if test="${not empty member}">
-		           <c:forEach items="${sessionScope.member.roleVOs}" var="i">
-		             <c:if test="${i.roleName eq 'ROLE_SELLER'}">
-				      <a href="#">상품등록</a>
-		             </c:if>
-		          </c:forEach>
-		       </c:if>
-		      	<a href="#">내캠페인</a>
+		      <sec:authorize access="hasRole('SELLER')">
+				      <a href="/member/product">내 상품</a>
+		       </sec:authorize>
+		      	<a href="#">내 캠페인</a>
 		      </div>
 		    </div>
             
-            </c:if>
+            </sec:authorize>
           </div>
         </div>
       </div>
@@ -119,14 +105,14 @@ prefix="c" %>
               </div>
               <div style="height: 68px">
                 <div id="email_icon"><i class="fa-regular fa-user"></i></div>
-                <input type="text" placeholder="아이디" id="id" />
+                <input type="text" placeholder="아이디" id="id" name="id" value="seller" />
                 <div class="inp" id="inp_id" style="display: none">아이디를 입력해주세요.</div>
               </div>
               <div style="height: 68px">
                 <div id="pw_icon">
                   <i class="fa-solid fa-lock"></i>
                 </div>
-                <input type="password" placeholder="비밀번호" id="pw" />
+                <input type="password" placeholder="비밀번호" id="pw" name="pw" value="sell1234!"/>
                 <div class="inp" id="inp_pw" style="display: none">비밀번호를 입력해주세요.</div>
               </div>
               <div
@@ -135,21 +121,21 @@ prefix="c" %>
               >
                 <div class="form-check2">
                   <input
-                    class="form-check-input2"
+                    class="rememberId form-check-input2"
                     type="checkbox"
-                    value=""
                     id="flexCheckChecked2"
                     checked
+                    name="rememberId"
                   />
                   <label class="form-check-label2" for="flexCheckChecked2">
-                    로그인 상태 유지
+                    아이디 기억하기
                   </label>
                 </div>
                 <div><a href="/member/find_id" id="id_search">아이디/비밀번호 찾기</a></div>
               </div>
               <div style="height: 10%">
                 <div class="d-grid gap-2">
-                  <button class="btn btn-success" id="log_btn" type="button">
+                  <button class="btn btn-success" id="log_btn">
                     로그인
                   </button>
                 </div>
@@ -173,7 +159,7 @@ prefix="c" %>
                 >
                 <div class="d-flex justify-content-center pt-3">
                   <div class="pe-3">
-                  	<a href="#">
+                  	<a href="/oauth2/authorization/kakao">
                     <img
                       src="/images/kakaotalk_logo_icon_147272.png"
                       style="width: 38px; height: 38px"
@@ -199,3 +185,28 @@ prefix="c" %>
         </div>
       </div>
     </div>
+
+    <script>
+   
+      if($("#id1").text()!=""){
+        
+        $(document).ready(function(){
+          console.log("sse 저장")
+          const id = $("#id1").text();
+          const eventSource = new EventSource('/sub/'+id);
+          console.log(eventSource)
+          eventSource.addEventListener("connect",function(event){
+            let message = event.data;
+            alert(message)
+          })
+          eventSource.addEventListener("addApply",function(event){
+            let message = event.data;
+            alert(message)
+          })
+          eventSource.addEventListener("error", function(event) {
+                  eventSource.close()
+              })
+        })
+      }
+  
+    </script>

@@ -25,15 +25,15 @@ prefix="c" %>
     </style>
   </head>
   <body>
-    <section class="container" style="width: 75%">
       <c:import url="../template/top_part.jsp"></c:import>
       <c:import url="../template/header.jsp"></c:import>
+    <section class="container" style="width: 75%">
       <div class="container">
         <div class="content d-flex">
           <c:import url="../template/mypage_side.jsp"></c:import>
           <div class="ms-3 mb-2" id="info" style="width: 100%">
             <!-- 여기부터 내정보 상세보기 -->
-            <div class="info_top p-2 mt-3 mb-3">
+            <div class="info_top p-2 mt-4 mb-3">
               <span style="color: rgb(10, 154, 10)">${memberVO.name}</span>님의 설정
             </div>
             <div
@@ -56,6 +56,7 @@ prefix="c" %>
                   <div class="pe-4" style="font-size: 18px">
                     <b>구디샵 비밀번호</b>
                   </div>
+                  
                   <div class="pe-2">
                     <input
                       type="password"
@@ -63,9 +64,12 @@ prefix="c" %>
                       class="ps-2"
                       id="pwCheck_setInput"
                       placeholder="비밀번호를 입력하세요."
+                      name="pw"
                     />
                   </div>
                   <button class="pe-3 ps-3 btn btn-dark btn-sm" id="set_pwCheck" >확 인</button>
+                  
+                  
                 </div>
               </div>
             </div>
@@ -111,8 +115,8 @@ prefix="c" %>
           </div>
         </div>
       </div>
-      <c:import url="../template/footer.jsp"></c:import>
     </section>
+      <c:import url="../template/footer.jsp"></c:import>
 
     <script src="/js/info.js"></script>
   </body>

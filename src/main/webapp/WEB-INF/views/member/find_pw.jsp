@@ -26,9 +26,9 @@ uri="http://www.springframework.org/tags/form" %>
     </style>
   </head>
   <body>
-    <section class="container" style="width: 75%">
       <c:import url="../template/top_part.jsp"></c:import>
       <c:import url="../template/header.jsp"></c:import>
+    <section class="container" style="width: 65%">
       <form:form action="./find" modelAttribute="memberVO" method="post">
         <div class="d-flex justify-content-center">
           <div>
@@ -146,17 +146,17 @@ uri="http://www.springframework.org/tags/form" %>
           </div>
         </div>
       </form:form>
-      <c:import url="../template/footer.jsp"></c:import>
     </section>
+      <c:import url="../template/footer.jsp"></c:import>
 
     <a
       data-bs-toggle="modal"
       data-bs-target="#exampleModal_findPw"
       style="display: none"
       id="pwFind_modal"
-      >아이디 찾기 모달창</a
+      >비밀번호 찾기 모달창</a
     >
-    <!-- 아이디 찾기 모달창 -->
+    <!-- 비밀번호 찾기 모달창 -->
     <div
       class="modal fade"
       id="exampleModal_findPw"
@@ -192,6 +192,7 @@ uri="http://www.springframework.org/tags/form" %>
               class="btn btn-success"
               style="border-radius: 18px; padding: 6px 18px"
               data-bs-dismiss="modal"
+              onclick="location.href='/'"
             >
               확인
             </button>

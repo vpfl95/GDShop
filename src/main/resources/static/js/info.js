@@ -414,3 +414,64 @@ $(document).ready(function () {
     }
   });
 });
+
+//등급확인
+//VIP등급 확인되면 페이지 변경
+function getVIP() {
+  $.ajax({
+    type: "POST",
+    url: "/member/VIP",
+    data: {},
+    success: function (data) {
+      if (data == 1) {
+        getVIPlist();
+      } else {
+        getUserGrade();
+      }
+    },
+  });
+}
+
+//vip등급 페이지
+function getVIPlist() {
+  $.ajax({
+    type: "POST",
+    url: "/member/VIP_list",
+    data: {},
+    success: function (data) {
+      $("#grade_box").html(data);
+    },
+  });
+}
+//member등급 페이지
+function getUserGrade() {
+  $.ajax({
+    type: "POST",
+    url: "/member/member_list",
+    data: {},
+    success: function (data) {
+      $("#grade_box").html(data);
+    },
+  });
+}
+
+//계정 닉네임 변경 요청
+$("#nick_btn").click(function () {
+  let nickName = $("#nick_text").val();
+  $.ajax({
+    type: "POST",
+    url: "/member/nickUpdate",
+    data: {
+      nickName: nickName,
+    },
+    success: function (data) {
+      if (data == 1) {
+        $("#f_nickName").attr("style", "display:none");
+        location.href = "/member/mypage";
+      } else {
+        $("#t_nickName").attr("style", "display:none");
+        location.href = "/member/mypage";
+      }
+    },
+  });
+});

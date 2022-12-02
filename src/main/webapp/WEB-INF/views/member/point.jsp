@@ -2,6 +2,7 @@
 pageEncoding="UTF-8"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/core"
 prefix="c" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -26,17 +27,17 @@ prefix="c" %>
     </style>
   </head>
   <body>
-    <section class="container" style="width: 75%">
       <c:import url="../template/top_part.jsp"></c:import>
       <c:import url="../template/header.jsp"></c:import>
+    <section class="container" style="width: 75%">
       <div class="container">
         <div class="content d-flex">
           <c:import url="../template/mypage_side.jsp"></c:import>
           <div class="ms-3 mb-2" id="info" style="width: 100%">
             <!-- 여기부터 내포인트 상세보기 -->
-            <div class="info_top d-flex p-2 mt-3 mb-3">
+            <div class="info_top d-flex p-2 mt-4 mb-3">
               <div>
-                <span style="color: rgb(10, 154, 10)">${memberVO.name}</span>님의 포인트
+                <span style="color: rgb(10, 154, 10)"><sec:authentication property="Principal.name"/></span>님의 포인트
               </div>
               <button class="ms-3" id="withdraw" data-bs-toggle="modal" data-bs-target="#exampleModal_withdraw" data-bs-whatever="@mdo">출금요청</button>
             </div>
@@ -50,7 +51,8 @@ prefix="c" %>
                 </div>
                 <div style="color: green">
                 <span style="font-size: 26px" id="myPoint">
-                <fmt:formatNumber type="number" maxFractionDigits="3" value="${memberVO.point_3}" />
+                <sec:authentication property="Principal" var="user"/>
+                <fmt:formatNumber type="number" maxFractionDigits="3" value="${user.point_3}" />
                 </span>
                   <i
                     class="fa-brands fa-product-hunt"
@@ -66,7 +68,7 @@ prefix="c" %>
                   적립 예정 포인트 <i class="fa-solid fa-circle-info" data-toggle="tooltip" data-bs-placement="top" data-custom-class="custom-tooltip" data-bs-title="캠페인 완료 후 포인트가 지급되었으나 3일이 지나지 않은 포인트 (3일 후 출금 가능)"></i>
                 </div>
                 <div style="color: green">
-                  <span style="font-size: 26px"><fmt:formatNumber type="number" maxFractionDigits="3" value="${memberVO.point}" /></span
+                  <span style="font-size: 26px"><fmt:formatNumber type="number" maxFractionDigits="3" value="${user.point}" /></span
                   ><i
                     class="fa-brands fa-product-hunt ps-1"
                     style="font-size: 21px"
@@ -126,7 +128,7 @@ prefix="c" %>
               </thead>
               <tbody>
               <!-- 캠페인 번호가 있으면 보이기 ${not empty missionVO.missionNum}-->
-              <c:if test="${memberVO.point_3 ne 0}">
+              <c:if test="${user.point_3 ne 0}">
                  <tr>
                   <td>2022-10-22</td>
                   <td>프로바이오틱스</td>
@@ -139,7 +141,7 @@ prefix="c" %>
             </table>
             
             <!-- 캠페인 번호가 없으면 보이기 ${empty missionVO.missionNum}-->
-            <c:if test="${memberVO.point_3 eq 0}">
+            <c:if test="${user.point_3 eq 0}">
             <div
               class="mb-5"
               style="
@@ -396,8 +398,8 @@ prefix="c" %>
           </div>
         </div>
       </div>
-      <c:import url="../template/footer.jsp"></c:import>
     </section>
+      <c:import url="../template/footer.jsp"></c:import>
     
 	 <!-- 툴팁 활성화 -->
 	 <script>
