@@ -1,7 +1,5 @@
 package com.shop.goodee.item;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.shop.goodee.member.MemberService;
 import com.shop.goodee.member.MemberVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -49,12 +46,17 @@ public class ItemController {
 		return mv;
 	}
 
+	//디테일
 	@GetMapping("detail")
-	public void getDetail() {
-
+	public ModelAndView getDetail(ItemVO itemVO) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		itemVO = itemService.getDetail(itemVO);
+		mv.addObject("vo", itemVO);
+		mv.setViewName("/item/detail");
+		return mv;
 	}
 
-	// 상품수정요청
+	//상품수정요청
 	@GetMapping("update")
 	public ModelAndView setUpdate(ItemVO itemVO) throws Exception {
 		ModelAndView mv = new ModelAndView();
@@ -84,7 +86,7 @@ public class ItemController {
 	}
 	
 
-	// 상품삭제요청
+	//상품삭제요청
 	@GetMapping("delete")
 	@ResponseBody
 	public int setStatusDel(HttpSession session, ItemVO itemVO) throws Exception {

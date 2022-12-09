@@ -36,16 +36,16 @@ prefix="c" %>
           <c:import url="../template/mypage_side.jsp"></c:import>
           <div class="ms-3 mb-2" id="info" style="width: 100%">
             <!-- 여기부터 내정보 상세보기 -->
-            <sec:authentication property="Principal" var="user"/>
             <div class="info_top p-2 mt-4 mb-3 d-flex">
-              <div><span style="color: rgb(10, 154, 10)">${user.name}</span>님의 상품목록</div>
+              <div><span style="color: rgb(10, 154, 10)">${memberVO.name}</span>님의 상품목록</div>
               <button id="product" onclick="location.href='/item/add'" style="font-size: 18px"><b>상품등록</b></button>
             </div>
               <!-- 목록보기 -->
               <div class="row mb-5">
               <c:forEach items="${ar}" var="item">
                  <div class="d-flex product_box col-6 m-2">
-                  <div><img src="/file/item/${item.itemFileVOs[0].fileName}" style="width: 170px; height: 100%; border-radius: 5px"/></div>
+                  <div><a href="/item/detail?itemNum=${item.items[0].itemNum }">
+                  <img src="/file/item/${item.itemFileVOs[0].fileName}" style="width: 170px; height: 100%; border-radius: 5px"/></a></div>
                   <div class="ps-4" style="width:60%">
                   	<div class="pb-2 pt-1" style="font-size: 22px; color: green;"><b>
                   	<c:choose>
@@ -90,6 +90,6 @@ prefix="c" %>
       </div>
     </section>
       <c:import url="../template/footer.jsp"></c:import>
-      <script src="/js/product.js"></script>
+      <script src="/js/item/product.js"></script>
   </body>
 </html>

@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core"
+prefix="c" %>
 <div
   class="p-3"
   style="
@@ -11,17 +13,21 @@
   "
 >
   <div class="grade_top mt-3">
-    <sec:authentication property="Principal.name"/>님은 <span>VIP등급</span>입니다.
+  <sec:authentication property="Principal" var="user"/>
+  <c:if test="${empty user.name}">
+    ${user.id}</c:if>
+    <c:if test="${not empty user.name}">
+    ${user.name}</c:if>님은 <span>VIP등급</span>입니다.
   </div>
   <hr />
   <div>
     <div>
       <div style="font-size: 14px">
-        이용기간 : <b>2020-05-22 ~ 2022-06-01</b>
+        이용기간 : <b>2022-12-07~ 2022-01-06</b>
       </div>
       <div class="pt-1" style="font-size: 14px">
         해지일 :
-        <span style="color: red">2022-06-01 해지예정</span>
+        <span style="color: red">2022-01-06 해지예정</span>
       </div>
     </div>
     <hr />

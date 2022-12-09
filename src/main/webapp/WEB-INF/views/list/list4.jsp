@@ -62,7 +62,8 @@
 				<div>
 					<div class="d-flex flex-column" style="width: 250px; height: 380px; margin-bottom: 50px">
 						<div>
-							<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px">
+							<a href="/item/detail?itemNum=${vo.itemNum }">
+							<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px"></a>
 						</div>
 
 						<div class="d-flex flex-column" style="width: 250px; height: 130px">
@@ -86,11 +87,20 @@
 							</div>
 							<div class="d-flex justify-content-start">
 								<div style="text-decoration: line-through; color: grey; font-size: 15px;" class="pe-2"><b>${vo.price }원</b></div>
-								<div class="pe-1" style="color:gray; font-size: 14px; line-height: 23px">실제구매가</div>
-								<div style="font-size: 18px; line-height: 22px; color: blue">
 								
-								<b><fmt:formatNumber type="number" maxFractionDigits="3" value="${vo.price-vo.point }" />원</b>
-								</div>
+								<c:if test="${vo.type eq 'SNS미션'}">
+									<div class="pe-1" style="color: gray; font-size: 14px; line-height: 23px">보상금액</div>
+									<div style="font-size: 18px; line-height: 22px; color: #FA6400">
+										<b><fmt:formatNumber type="number" maxFractionDigits="3" value="${vo.point }" />원</b>
+									</div>
+								</c:if>
+
+								<c:if test="${vo.type ne 'SNS미션'}">
+									<div class="pe-1" style="color:gray; font-size: 14px; line-height: 23px">실제구매가</div>
+									<div style="font-size: 18px; line-height: 22px; color: blue">
+										<b><fmt:formatNumber type="number" maxFractionDigits="3" value="${vo.price-vo.point }" />원</b>
+									</div>
+								</c:if>
 							</div>
 							<div class="d-flex justify-content-between">
 								<div style="font-size: 18px; color: blue">
