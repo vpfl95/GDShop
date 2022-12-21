@@ -2,6 +2,7 @@ package com.shop.goodee.item;
 
 import javax.servlet.http.HttpSession;
 
+import org.checkerframework.checker.units.qual.min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextImpl;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.shop.goodee.member.MemberService;
 import com.shop.goodee.member.MemberVO;
+import com.shop.goodee.mission.MissionService;
+import com.shop.goodee.mission.MissionVO;
 import com.shop.goodee.sse.NotificationService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +30,23 @@ public class ItemController {
 	private NotificationService notificationService;
 	@Autowired
 	private ItemService itemService;
+	@Autowired
+	private MemberService memberService;
+	
+	@PostMapping("setRequest")
+	@ResponseBody
+	public int setRequest(ItemVO itemVO)throws Exception {
+		int result = itemService.setRequest(itemVO);
+		return result;
+	}
+	
+	@PostMapping("setDelRequest")
+	@ResponseBody
+	public int setDelRequest(ItemVO itemVO)throws Exception {
+		int result = itemService.setDelRequest(itemVO);
+		return result;
+	}
+	
 
 	// 상품등록
 	@GetMapping("add")
@@ -57,6 +78,19 @@ public class ItemController {
 		mv.setViewName("/item/detail");
 		return mv;
 	}
+	
+	//VIP회원만 지원가능
+	@GetMapping("VIPCheck")
+	@ResponseBody
+	public int getDetail(HttpSession session) throws Exception {
+		MemberVO memberVO = new MemberVO();
+		SecurityContextImpl context = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
+        Authentication authentication = context.getAuthentication();
+        memberVO = (MemberVO) authentication.getPrincipal();
+		int count = memberService.getVIP(memberVO);
+		return count;
+	}
+
 
 	//상품수정요청
 	@GetMapping("update")

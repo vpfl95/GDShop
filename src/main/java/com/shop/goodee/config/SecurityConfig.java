@@ -50,7 +50,10 @@ public class SecurityConfig {
             .antMatchers("/css/**")
             .antMatchers("/js/**")
             .antMatchers("/favicon/**")
-            .antMatchers("/resources/**");
+            .antMatchers("/resources/**")
+            .antMatchers("/chat/*")
+            .antMatchers("/ws/*")
+            .antMatchers("/chating/*");
    }
 
    @Bean
@@ -58,16 +61,19 @@ public class SecurityConfig {
       httpSecurity
                .cors()
                .and()
-               .csrf()
-               .disable()
+               .csrf().disable()
+               .headers().frameOptions().sameOrigin()
+               .and()
             .authorizeRequests()
                .antMatchers("/").permitAll()
                .antMatchers("/tab/*").permitAll()
                .antMatchers("/seller/seller").permitAll()
                .antMatchers("/board/notice").permitAll()
                .antMatchers("/chat/*").permitAll()
+               .antMatchers("/ws/*").permitAll()
                .antMatchers("/item/detail").permitAll()
-               .antMatchers("/item/modal").permitAll()
+               .antMatchers("/item/mission").permitAll()
+               .antMatchers("/mission/*").permitAll()
                .antMatchers("/member/join").permitAll()
                .antMatchers("/membership/membership").permitAll()
                .antMatchers("/member/agree").permitAll()

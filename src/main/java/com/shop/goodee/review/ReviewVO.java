@@ -5,7 +5,9 @@ import lombok.Data;
 @Data
 public class ReviewVO {
 	
-	private String nickName;//유저명
+	private Long missionNum;
+	private String nickName;//쿠팡닉네임
+	public String nickName_N;//네이버아이디
 	private String title;//상품이름
 	private String date;//날짜
 	private String titleDetail;//세부상품이름

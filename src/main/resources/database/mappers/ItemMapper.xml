@@ -4,6 +4,16 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
    
 <mapper namespace="com.shop.goodee.item.ItemMapper">
+	
+	<!-- 상품요청 승인,거절,종료  -->
+	<update id="setRequest" parameterType="ItemVO">
+		UPDATE ITEM SET STATUS=#{status} WHERE ITEMNUM=#{itemNum}   
+	</update>
+	
+	<delete id="setDelRequest" parameterType="ItemVO">
+		DELETE FROM ITEM WHERE ITEMNUM=#{itemNum}
+	</delete>
+
 
 	<insert id="setAdd" parameterType="ItemVO" useGeneratedKeys="true" keyProperty="itemNum">
 		INSERT INTO ITEM VALUES(NULL, #{id}, #{itemName}, IFNULL(#{price}, 0), #{title}, #{type}, #{point}, #{detail}, #{stock}, IFNULL(#{count}, 0), #{url}, NOW(), 0, 0, #{shop}, #{role}, IFNULL(#{sellerSNS}, ""))
@@ -19,79 +29,13 @@
 		LEFT JOIN
 		ITEM_FILE F
 		USING(ITEMNUM)
-		WHERE ITEMNUM=#{itemNum}
-	</select>
-		<resultMap type="ItemVO" id="getDetailResult">
-		<id column="ITEMNUM" property="itemNum"/>
-		<result column="ID" property="id"/>
-		<result column="ITEMNAME" property="itemName"/>
-		<result column="PRICE" property="price"/>
-		<result column="TITLE" property="title"/>
-		<result column="TYPE" property="type"/>
-		<result column="ROLE" property="role"/>
-		<result column="POINT" property="point"/>
-		<result column="DETAIL" property="detail"/>
-		<result column="STOCK" property="stock"/>
-		<result column="COUNT" property="count"/>
-		<result column="SHOP" property="shop"/>
-		<result column="URL" property="url"/>
-		<result column="DATE" property="date"/>
-		<result column="HIT" property="hit"/>
-		<result column="STATUS" property="status"/>
-		<result column="SELLERSNS" property="sellerSNS"/>
-		
-		<collection property="itemFileVOs" javaType="List" ofType="ItemFileVO"> 
-			<id column="FILENUM" property="fileNum"/>
-			<result column="ITEMNUM" property="itemNum"/>
-			<result column="FILENAME" property="fileName"/>
-			<result column="ORINAME" property="oriName"/>		
-		</collection>	
-	</resultMap>
-	
-	<update id="setUpdate" parameterType="ItemVO">
-		UPDATE ITEM
-		SET ITEMNAME=#{itemName}, TITLE=#{title}, POINT=#{point}, DETAIL=#{detail}, URL=#{url}, STATUS=2, SHOP=#{shop}, ROLE=#{role}, SELLERSNS=#{sellerSNS}
-		WHERE ITEMNUM=#{itemNum}
-	</update>
-	
-	<select id="getFileDetail" parameterType="ItemFileVO" resultType="ItemFileVO">
-		SELECT * FROM ITEM_FILE WHERE FILENUM=#{fileNum}
-	</select>
-	
-	<delete id="setFileDelete" parameterType="ItemFileVO">
-		DELETE FROM ITEM_FILE WHERE FILENUM=#{fileNum}
-	</delete>
-	
-	<update id="setStatusDel" parameterType="ItemVO">
-		UPDATE ITEM SET STATUS=3 WHERE ID=#{id} and ITEMNUM=#{itemNum}
-	</update>
-	
-	<delete id="setDelete" parameterType="ItemVO">
-		DELETE FROM ITEM WHERE ITEMNUM=#{itemNum}
-	</delete>
-	
-	
-	
-	<sql id="search">
-		SELECT S.COMPANY, I.*, F.* 
-		FROM ITEM I
-		LEFT OUTER JOIN
+		LEFT JOIN
 		SELLER S
 		USING(ID)
-		LEFT OUTER JOIN
-		ITEM_FILE F
-		USING(ITEMNUM)
-	</sql>
-	
-	<!-- 최신순 -->
-	<select id="getList" resultType="ItemVO" resultMap="getListResult">
-		<include refid="search"></include>
-		WHERE I.STATUS=1
-		GROUP BY(I.ITEMNUM)
-		ORDER BY I.ITEMNUM DESC
-		LIMIT 0, 4
+		WHERE ITEMNUM=#{itemNum}
 	</select>
-	<resultMap type="ItemVO" id="getListResult">
+	
+	<resultMap type="ItemVO" id="getDetailResult">
 		<id column="ITEMNUM" property="itemNum"/>
 		<result column="ID" property="id"/>
 		<result column="ITEMNAME" property="itemName"/>
@@ -124,52 +68,103 @@
 		</collection>	
 	</resultMap>
 	
-	<!-- 인기순 -->
-	<select id="getListHit" resultType="ItemVO" resultMap="getListResult">
+	
+	<update id="setUpdate" parameterType="ItemVO">
+		UPDATE ITEM
+		SET ITEMNAME=#{itemName}, TITLE=#{title}, POINT=#{point}, DETAIL=#{detail}, URL=#{url}, STATUS=2, SHOP=#{shop}, ROLE=#{role}, SELLERSNS=#{sellerSNS}
+		WHERE ITEMNUM=#{itemNum}
+	</update>
+	
+	<select id="getFileDetail" parameterType="ItemFileVO" resultType="ItemFileVO">
+		SELECT * FROM ITEM_FILE WHERE FILENUM=#{fileNum}
+	</select>
+	
+	<delete id="setFileDelete" parameterType="ItemFileVO">
+		DELETE FROM ITEM_FILE WHERE FILENUM=#{fileNum}
+	</delete>
+	
+	<update id="setStatusDel" parameterType="ItemVO">
+		UPDATE ITEM SET STATUS=3 WHERE ID=#{id} and ITEMNUM=#{itemNum}
+	</update>
+	
+	
+	
+	<sql id="search">
+		SELECT S.COMPANY, I.*, F.* 
+		FROM ITEM I
+		LEFT OUTER JOIN
+		SELLER S
+		USING(ID)
+		LEFT OUTER JOIN
+		ITEM_FILE F
+		USING(ITEMNUM)
+	</sql>
+	
+	<!-- 최신순 -->
+	<select id="getList" resultType="ItemVO" resultMap="getDetailResult">
 		<include refid="search"></include>
-		WHERE I.STATUS=1
+		WHERE I.STATUS!=0
+		GROUP BY(I.ITEMNUM)
+		ORDER BY I.ITEMNUM DESC
+		LIMIT 0, 4
+	</select>
+
+	
+	<!-- 인기순 -->
+	<select id="getListHit" resultType="ItemVO" resultMap="getDetailResult">
+		<include refid="search"></include>
+		WHERE I.STATUS!=0
 		GROUP BY(I.ITEMNUM)
 		ORDER BY HIT DESC
 		LIMIT 0, 4
 	</select>
 	
 	<!-- VIP전용 -->
-	<select id="getListVIP" resultType="ItemVO" resultMap="getListResult">
+	<select id="getListVIP" resultType="ItemVO" resultMap="getDetailResult">
 		<include refid="search"></include>
-		WHERE `ROLE` = 'VIP' AND I.STATUS=1
+		WHERE `ROLE` = 'VIP' AND I.STATUS!=0
 		GROUP BY(I.ITEMNUM)
 		ORDER BY I.ITEMNUM DESC
 		LIMIT 0, 4
 	</select>
 	
-	<!-- 추첨형 -->
-	<select id="getList1" resultType="ItemVO" resultMap="getListResult">
+	<!-- 당첨률 높은순 -->
+	<select id="getListSuccess" resultType="ItemVO" resultMap="getDetailResult">
 		<include refid="search"></include>
-		WHERE `TYPE` = '추첨형' AND I.STATUS=1
+		WHERE I.STATUS!=0
+		GROUP BY(I.ITEMNUM)
+		ORDER BY STOCK*COUNT DESC
+		LIMIT 0, 4
+	</select>
+	
+	<!-- 추첨형 -->
+	<select id="getList1" resultType="ItemVO" resultMap="getDetailResult">
+		<include refid="search"></include>
+		WHERE `TYPE` = '추첨형' AND I.STATUS!=0
 		GROUP BY(I.ITEMNUM)
 		ORDER BY I.ITEMNUM DESC
 	</select>
 	
 	<!-- 즉석추첨형 -->
-	<select id="getList2" resultType="ItemVO" resultMap="getListResult">
+	<select id="getList2" resultType="ItemVO" resultMap="getDetailResult">
 		<include refid="search"></include>
-		WHERE `TYPE` = '즉석추첨형' AND I.STATUS=1
+		WHERE `TYPE` = '즉석추첨형' AND I.STATUS!=0
 		GROUP BY(I.ITEMNUM)
 		ORDER BY I.ITEMNUM DESC
 	</select>
 	
 	<!-- SNS미션 -->
-	<select id="getList3" resultType="ItemVO" resultMap="getListResult">
+	<select id="getList3" resultType="ItemVO" resultMap="getDetailResult">
 		<include refid="search"></include>
-		WHERE `TYPE` = 'SNS미션' AND I.STATUS=1
+		WHERE `TYPE` = 'SNS미션' AND I.STATUS!=0
 		GROUP BY(I.ITEMNUM)
 		ORDER BY I.ITEMNUM DESC
 	</select>
 	
 	<!-- VIP전용 -->
-	<select id="getList4" resultType="ItemVO" resultMap="getListResult">
+	<select id="getList4" resultType="ItemVO" resultMap="getDetailResult">
 		<include refid="search"></include>
-		WHERE `ROLE` = 'VIP' AND I.STATUS=1
+		WHERE `ROLE` = 'VIP' AND I.STATUS!=0
 		GROUP BY(I.ITEMNUM)
 		ORDER BY I.ITEMNUM DESC
 	</select>

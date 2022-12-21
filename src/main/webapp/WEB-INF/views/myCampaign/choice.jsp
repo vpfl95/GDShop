@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,6 +23,7 @@
 
 </head>
 <body>
+	<div style="margin-bottom:500px;">
 	<c:import url="../template/top_part.jsp"></c:import>
 	<c:import url="../template/header.jsp"></c:import>
 	<section class="container" style="width: 65%">
@@ -30,8 +32,8 @@
 
 			<h2>
 				내 캠페인
-				</h1>
-				<ul class="nav nav-tabs">
+				</h2>
+				<ul class="nav nav-tabs mb-4">
 					<li class="nav-item"><a class="nav-link select"  href="./apply" id="apply" data-value="0">지원</a></li>
 					<li class="nav-item"><a class="nav-link select active"  href="./choice" id="choice" data-value="1">선정/미션중</a></li>
 					<li class="nav-item"><a class="nav-link select"  href="./complete" id="complete" data-value="2">미션완료</a></li>
@@ -39,7 +41,7 @@
 				</ul>
 				<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4" style="height: 380px">
 				<c:forEach items="${list }" var="vo">
-					<div>
+					<div style="margin-bottom:40px">
 						<div class="d-flex flex-column" style="width: 250px; height: 380px">
 							<div>
 							<a href="/item/detail?itemNum=${vo.itemNum }">
@@ -70,7 +72,7 @@
 										</c:otherwise>
 									</c:choose>
 									<span class="px-1" style="color: grey">|</span>
-									<div style="color: grey"></div>
+									<div style="color: grey">${vo.sellerVO.company }</div>
 								</div>
 							</div>
 							<div class="my-1">
@@ -85,7 +87,7 @@
 
 								<c:if test="${vo.itemVO.type eq 'SNS미션'}">
 									<div class="pe-1" style="color: gray; font-size: 14px; line-height: 23px">보상금액</div>
-									<div style="font-size: 18px; line-height: 22px; color: blue">
+									<div style="font-size: 18px; line-height: 22px; color: #FA6400">
 										<b><fmt:formatNumber type="number" maxFractionDigits="3" value="${vo.itemVO.point }" />원</b>
 									</div>
 								</c:if>
@@ -130,6 +132,7 @@
 						messages</span></span></a>
 		</div>
 	</section>
+	</div>
 	<c:import url="../template/footer.jsp"></c:import>
 	<script src="/js/index.js"></script>
 	<script src="/js/timer.js"></script>

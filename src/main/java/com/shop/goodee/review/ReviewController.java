@@ -1,11 +1,19 @@
 package com.shop.goodee.review;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.shop.goodee.member.MemberVO;
+import com.shop.goodee.mission.MissionService;
+import com.shop.goodee.mission.MissionVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,51 +24,115 @@ public class ReviewController {
 
 	@Autowired
 	private ReviewService reviewService;
-	
+
+	@Autowired
+	private MissionService missionService;
+
 	@GetMapping("test")
 	@ResponseBody
-	public void test() throws Exception{
+	public void test() throws Exception {
 //		CrawService bot1 = new CrawService();
 //		bot1.activateBot();
 	}
-	
+
 	@GetMapping("review")
-	public void craw() throws Exception{
-		
+	public void craw() throws Exception {
+
 	}
-	
+
 	@PostMapping("getReview")
 	@ResponseBody
-	public ReviewVO getReview(TestVO testVO) throws Exception{		
-		ReviewVO finalReviewVO = reviewService.getReview(testVO); 
-//솔직냥집사//	https://www.coupang.com/vp/products/6069827772?vendorItemId=82651418206&sourceType=HOME_TRENDING_ADS&searchId=feed-80ded603807b463cbbea976ec8a8c493-trending_ads-69184&clickEventId=e40dc083-2251-45ef-8e41-77b490b4ae32&isAddedCart=
-//까꿍까꿍e//	https://www.coupang.com/vp/products/6195520414?vendorItemId=79530657314&sourceType=HOME_PERSONALIZED_ADS&searchId=feed-59b450cb58714c4183ed4ea35bbfd230-personalized_ads&clickEventId=5be15d2b-dc9a-4f54-9f3a-7b7e042bf624&isAddedCart=
-//냉월//		https://www.coupang.com/vp/products/12293897?vendorItemId=3718447127&sourceType=MyCoupang_my_orders_list_product_title&isAddedCart=
-		
-		log.info("=========Controller========");
-		log.info("닉네임)"+finalReviewVO.getNickName());
-		log.info("상품명)"+finalReviewVO.getTitle());
-		log.info("날짜)"+finalReviewVO.getDate());
-		log.info("세부상품명)"+finalReviewVO.getTitleDetail());
-		log.info("리뷰)"+finalReviewVO.getReview());
-		log.info("리뷰글자수)"+finalReviewVO.getReviewLength());
+	public int getReview(HttpSession session, TestVO testVO, MissionVO missionVO) throws Exception {
 
-		return finalReviewVO;
+		ReviewVO reviewVO = reviewService.getReview(testVO);
+		log.info("=========Controller========");
+		log.info("닉네임)" + reviewVO.getNickName());
+		log.info("상품명)" + reviewVO.getTitle());
+		log.info("날짜)" + reviewVO.getDate());
+		log.info("세부상품명)" + reviewVO.getTitleDetail());
+		log.info("리뷰)" + reviewVO.getReview());
+		log.info("리뷰글자수)" + reviewVO.getReviewLength());
+
+		// ID
+		SecurityContextImpl context = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
+		Authentication authentication = context.getAuthentication();
+		MemberVO memberVO = (MemberVO) authentication.getPrincipal();
+		missionVO.setId(memberVO.getId());
+		reviewVO.setId(memberVO.getId());
+
+		// 미션번호
+		missionVO = missionService.getApply(missionVO);
+		testVO.setMissionNum(missionVO.getMissionNum());
+		reviewVO.setMissionNum(testVO.getMissionNum());
+		
+		log.info("reviewVO{}" + reviewVO);
+		log.info("testVO{}" + testVO);
+
+		if (reviewVO.getNickName().equals(testVO.getNickName())) {
+			try {
+				if (reviewVO.getReviewLength() >= 50) {
+					// 쿠팡닉네임등록
+					int result = missionService.setNicC(reviewVO);
+					if(result==1) {
+						// status 1->2
+						result = missionService.setMiStatus2(reviewVO);
+						return result;
+					}
+				} else {
+					return 2;
+				}
+			} catch (Exception e) {
+				return 2;
+			}
+		}
+		return 0;
 	}
-	
+
 	@PostMapping("getReviewNaver")
 	@ResponseBody
-	public ReviewVO getReviewNaver(ReviewVO reviewVO) throws Exception{
+	public int getReviewNaver(HttpSession session, TestVO testVO, MissionVO missionVO) throws Exception {
+
+		ReviewVO reviewVO = new ReviewVO();
+		reviewVO = reviewService.getReviewNaver(testVO);
+
+		// ID
+		SecurityContextImpl context = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
+		Authentication authentication = context.getAuthentication();
+		MemberVO memberVO = (MemberVO) authentication.getPrincipal();
+		missionVO.setId(memberVO.getId());
+		reviewVO.setId(memberVO.getId());
+
+		// 미션번호
+		missionVO = missionService.getApply(missionVO);
+		reviewVO.setMissionNum(missionVO.getMissionNum());
 		
-		reviewVO = reviewService.getReviewNaver(reviewVO);
+		//닉네임
+		reviewVO.setNickName_N(testVO.getNickName());
+		
 		log.info("===============Controller===============");
-		log.info("리뷰내용) {}",reviewVO.getReview());
-		log.info("리뷰글자수) {}",reviewVO.getReviewLength());
-		
-		return reviewVO;
-//junsolhee7//	https://smartstore.naver.com/onfitcompany/products/6995256658?NaPm=ct%3Dlauoe07v%7Cci%3Dcheckout%7Ctr%3Dmyv%7Ctrx%3D%7Chk%3De1b4df713e31651ce6097709a9f2943664548276
-//junsolhee7//	https://smartstore.naver.com/donggangmc/products/7211535216?NaPm=ct%3Dlavsqta1%7Cci%3Dcheckout%7Ctr%3Dppc%7Ctrx%3D%7Chk%3D93a6598c34bdb010e4c3fa2fcb2a7150ab9b7060
-//mystqwerasd//	https://shopping.naver.com/window-products/necessity/5670007615?NaPm=ct%3Dlavxb9d7%7Cci%3Dshoppingwindow%7Ctr%3Dnct%7Chk%3D274c80640562ebb58fa234171dc51d78437fe888%7Ctrx%3D&tr=nct		
+		log.info("리뷰내용) {}", reviewVO.getReview());
+		log.info("리뷰글자수) {}", reviewVO.getReviewLength());
+		log.info("reviewVO) {}", reviewVO);
+		log.info("testVO) {}", testVO);
+
+		try {
+			if (reviewVO.getNickName() != "") {
+				if (reviewVO.getReviewLength() >= 50) {
+					// 네이버아이디등록
+					int result = missionService.setNicN(reviewVO);
+					if(result==1) {
+						// status 1->2
+						result = missionService.setMiStatus2(reviewVO);
+						return result;
+					}
+				} else {
+					return 2;
+				}
+			}
+			return 0;
+		} catch (Exception e) {
+			return 0;
+		}
 	}
-	
+
 }

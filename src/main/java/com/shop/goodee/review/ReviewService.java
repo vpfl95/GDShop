@@ -16,9 +16,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.beust.jcommander.internal.Console;
-import com.shop.goodee.review.ReviewVO;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -52,7 +49,7 @@ public class ReviewService {
 																																						// 설정
 		options.addArguments("--disable-blink-features=AutomationControlled");
 		options.addArguments("--disable-extensions");
-//		options.addArguments("headless");
+		options.addArguments("headless");
 
 		driver = new ChromeDriver(options);
 		System.out.println(testVO.getUrl());
@@ -223,7 +220,7 @@ public class ReviewService {
 
 	//////////////////////////////////////////////////////////////////// 네이버 시작
 	//////////////////////////////////////////////////////////////////// ////////////////////////////////////////////////////////////////////
-	public ReviewVO getReviewNaver(ReviewVO reviewVO) {
+	public ReviewVO getReviewNaver(TestVO testVO) {
 		
 		System.setProperty(WEB_DRIVER_ID, chromePath);
 				
@@ -237,9 +234,9 @@ public class ReviewService {
 //		options.addArguments("headless");
 		
 		driver = new ChromeDriver(options);
-		System.out.println(reviewVO.getUrl());
+		System.out.println(testVO.getUrl());
 		
-		url = reviewVO.getUrl();
+		url = testVO.getUrl();
 		ReviewVO finalReviewVO = new ReviewVO();
 		try {
 			driver.get(url); // 1. url 접속
@@ -267,7 +264,7 @@ public class ReviewService {
 			String xpathBackID = "]/div/div/div/div[1]/div/div/div[1]/div[2]/div[2]/strong";
 			String xpathID = "";
 			//*[@id="REVIEW"]/div/div[3]/div[2]/ul/li[1]/div/div/div/div[1]/div/div[1]/div[1]/div[2]/div[2]/strong
-			String searchNickName = reviewVO.getNickName(); //찾을 닉네임, 찾을 글자(2 or 4)
+			String searchNickName = testVO.getNickName(); //찾을 닉네임, 찾을 글자(2 or 4)
 			int searchLength; //찾을 글자수
 			boolean check = true; // 찾으면 false
 			
@@ -372,10 +369,10 @@ public class ReviewService {
 							log.info("{}리뷰내용) {}",m,review);
 							log.info("{}리뷰글자수) {}",m,reviewLength);
 							
-							reviewVO.setNickName(nickName);
-							reviewVO.setReview(review);
-							reviewVO.setReviewLength(reviewLength);
-							reviewVOs.add(reviewVO);
+							finalReviewVO.setNickName(nickName);
+							finalReviewVO.setReview(review);
+							finalReviewVO.setReviewLength(reviewLength);
+							reviewVOs.add(finalReviewVO);
 						}
 						Thread.sleep(100);
 						if(!check) {
@@ -391,9 +388,9 @@ public class ReviewService {
 				j++;
 			}//while(check)문
 
-			log.info("닉네임){}",reviewVO.getNickName());
-			log.info("리뷰){}",reviewVO.getReview());
-			log.info("리뷰수){}",reviewVO.getReviewLength());
+			log.info("닉네임){}",finalReviewVO.getNickName());
+			log.info("리뷰){}",finalReviewVO.getReview());
+			log.info("리뷰수){}",finalReviewVO.getReviewLength());
 			
 			
 		}catch (Exception e) {
@@ -402,6 +399,6 @@ public class ReviewService {
 //			driver.quit();
 		}
 			
-		return reviewVO;
+		return finalReviewVO;
 	}
 }

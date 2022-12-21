@@ -41,17 +41,13 @@
 			
 			<div class="search mb-5" style="border-bottom: 1px solid #d8d8d8;">
 				<div class="available">
-					<input type="checkbox" value="" id="able">
-					<label for="able">지원 가능</label> 
 				</div>
 				<div class="order">
 					<button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">최신순
 					<img src="/images/borrom-arrow.svg">
 					</button>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#">추천순</a></li>
 						<li><a class="dropdown-item" href="#">인기순</a></li>
-						<li><a class="dropdown-item" href="#">당첨률순</a></li>
 						<li><a class="dropdown-item" href="#">마감순</a></li>
 					</ul>
 				</div>
@@ -62,10 +58,19 @@
 				<c:forEach items="${list3 }" var="vo" >
 				<div>
 					<div class="d-flex flex-column" style="width: 250px; height: 380px; margin-bottom: 50px">
+						<c:if test="${vo.role eq 'VIP' }">
+						<div> 
+						<div style="position: relative;"><a href="/item/detail?itemNum=${vo.itemNum }">
+							<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px"></a>
+						<div style="position:absolute; top:0; right:0 "><img src="/images/vip.png" width="70px" style="padding: 5px 5px 0 0"></div></div>
+						</div>
+						</c:if>
+						<c:if test="${vo.role eq '모두' }">
 						<div>
 							<a href="/item/detail?itemNum=${vo.itemNum }">
 							<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px"></a>
 						</div>
+						</c:if>
 
 						<div class="d-flex flex-column" style="width: 250px; height: 130px">
 							<div class="d-flex justify-content-start pt-1" style="font-size: 14px">
@@ -112,20 +117,26 @@
 		<!-- 챗봇 -->
 		<div>
 			<div id="chat_ev" style="display: none">궁금한 부분 질문주세요!</div>
-			<a class="btn" id="chat_bot"> <img id="chat_img"
-				src="/images/16208041651620804165203.png" />
+			<a class="btn" id="chat_bot" onclick="new_window();"> <img id="chat_img"
+				src="/images/산타_구원이_(1).png"/>
 				<div class="pt-2">
 					<b>구디 챗봇</b>
-				</div> <span
-				class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-				style="font-size: 13px;">+0 <span class="visually-hidden">unread
-						messages</span></span></a>
+				</div></a>
 		</div>
 
 	</section>
 		<c:import url="../template/footer.jsp"></c:import>
 	<script src="/js/index.js"></script>
 	<script src="/js/timer.js"></script>
+	<script>
+      function new_window() {
+        window.open(
+          "/chat/chatbot",
+          "Child",
+          "width=450, height=550, top=100, left=1000"
+        );
+      }
+    </script>
 </body>
 </html>
 

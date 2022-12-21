@@ -24,6 +24,8 @@
 }
 </style>
 </head>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/snowfall.jquery.js"></script>
 <body>
 		<c:import url="./template/top_part.jsp"></c:import>
 		<c:import url="./template/header.jsp"></c:import>
@@ -31,13 +33,13 @@
 		<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
 		  <div class="carousel-inner">
 		    <div class="carousel-item active">
-		      <img src="/images/pc_crop.jpg" class="d-block w-100" alt="...">
+		      <img src="/images/C1_PC1 (1).jpg" class="d-block w-100" alt="...">
+		    </div>
+		    <div class="carousel-item">
+		      <img src="/images/221221_C1_빅시즌_크리스마스_SMD-23928_PC.jpg" class="d-block w-100" alt="...">
 		    </div>
 		    <div class="carousel-item">
 		      <img src="/images/C1_PC1.jpg" class="d-block w-100" alt="...">
-		    </div>
-		    <div class="carousel-item">
-		      <img src="/images/co.jpg" class="d-block w-100" alt="...">
 		    </div>
 		  </div>
 		  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -57,8 +59,16 @@
 				<c:forEach items="${list }" var="vo">
 					<div>
 						<div class="d-flex flex-column" style="width: 250px; height: 380px">
-							<div><a href="/item/detail?itemNum=${vo.itemNum }">
+						<c:if test="${vo.role eq 'VIP' }">
+							<div> <div style="position: relative;"><a href="/item/detail?itemNum=${vo.itemNum }">
+								<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px;"></a> 
+								<div style="position:absolute; top:0; right:0 "><img src="/images/vip.png" width="70px" style="padding: 5px 5px 0 0"></div></div>
+							</div>
+						</c:if>
+						<c:if test="${vo.role eq '모두' }">
+						<div><a href="/item/detail?itemNum=${vo.itemNum }">
 							<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px"></a></div>
+						</c:if>
 							<div class="d-flex flex-column" style="width: 250px; height: 130px">
 								<div class="d-flex justify-content-start pt-1" style="font-size: 14px">
 									<c:choose>
@@ -128,21 +138,113 @@
 			</div>
 		</div>
 
+	<!-- VIP전용 -->
+		<div style="background-color: #eef0f8;">
+			<div class="container" style=" width:65%; padding-top: 4em; padding-bottom: 70px;">
+				<div class="d-flex justify-content-between">
+					<div style="height: 40px; font-size: 22px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 20px;">프리미엄 상품을 만나보세요</div>
+					<div class="more"><a href="./tab/tab4" style="text-decoration: none; color: black;"> 더보기 <i class="fa-solid fa-circle-chevron-right" style="color: rgb(130, 203, 41);"></i></a>
+					</div>
+				</div>
+				<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4"
+					style="height: 380px">
+					<c:forEach items="${listVIP }" var="vo">
+						<div>
+							<div class="d-flex flex-column" style="width: 250px; height: 380px">
+								<div> <div style="position: relative;"><a href="/item/detail?itemNum=${vo.itemNum }">
+								<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px;"></a> 
+								<div style="position:absolute; top:0; right:0 "><img src="/images/vip.png" width="70px" style="padding: 5px 5px 0 0"></div></div>
+								</div>
+								<div class="d-flex flex-column" style="width: 250px; height: 130px">
+									<div class="d-flex justify-content-start pt-1" style="font-size: 14px">
+										<c:choose>
+											<c:when test="${vo.shop eq '쿠팡'}">
+												<div style="color: red">
+													<b>${vo.shop }</b>
+												</div>
+											</c:when>
+											<c:when test="${vo.shop eq '네이버'}">
+												<div style="color: #2DB400">
+													<b>${vo.shop }</b>
+												</div>
+											</c:when>
+											<c:when test="${vo.shop eq '인스타그램'}">
+												<div style="color: purple">
+													<b>${vo.shop }</b>
+												</div>
+											</c:when>
+											<c:otherwise>
+												<div style="color: #646464">
+													<b>${vo.shop }</b>
+												</div>
+											</c:otherwise>
+										</c:choose>
+										<span class="px-1" style="color: grey">|</span>
+										<div style="color: grey">${vo.sellerVO.company }</div>
+									</div>
+								</div>
+								<div class="my-1">
+									<p style="font-size: 16px; height: 50px; margin: 0; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+										<b>${vo.title }</b>
+									</p>
+								</div>
+								<div class="d-flex justify-content-start">
+									<div style="text-decoration: line-through; color: grey; font-size: 15px;" class="pe-2">
+										<b>${vo.price }원</b>
+									</div>
+	
+									<c:if test="${vo.type eq 'SNS미션'}">
+										<div class="pe-1" style="color: gray; font-size: 14px; line-height: 23px">보상금액</div>
+										<div style="font-size: 18px; line-height: 22px; color: #FA6400">
+											<b><fmt:formatNumber type="number" maxFractionDigits="3" value="${vo.point }" />원</b>
+										</div>
+									</c:if>
+	
+									<c:if test="${vo.type ne 'SNS미션'}">
+										<div class="pe-1" style="color: gray; font-size: 14px; line-height: 23px">실제구매가</div>
+										<div style="font-size: 18px; line-height: 22px; color: blue">
+											<b><fmt:formatNumber type="number" maxFractionDigits="3" value="${vo.price-vo.point }" />원</b>
+										</div>
+									</c:if>
+	
+								</div>
+								<div class="d-flex justify-content-between">
+									<div style="font-size: 18px; color: blue">
+										<i class="fa-regular fa-clock"></i> 
+										<input type="hidden" value="${vo.date}" class="date"> 
+										<input type="hidden" value="${vo.count}" class="count"> 
+										<b class="time"></b>
+										<b><span class="hours"></span><span class="minutes"></span><span class="seconds"></span></b>
+									</div>
+									<div style="font-size: 12px; line-height: 28px; color: gray">마감임박</div>
+								</div>
+							</div>
+						</div>
+					</c:forEach>
+				</div>
+			</div>
+		</div>
+		
 		<!-- 인기순 -->
 		<div class="container" style=" width:65%; padding-top: 4em; padding-bottom: 70px;">
 			<div class="d-flex justify-content-between">
 				<div style="height: 40px; font-size: 22px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 20px;">실시간 인기 캠페인!</div>
-				<div class="more"> 더보기 <i class="fa-solid fa-circle-chevron-right" style="color: rgb(130, 203, 41)"></i>
-				</div>
 			</div>
 			<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4"
 				style="height: 380px">
 				<c:forEach items="${listHit }" var="vo">
 					<div>
 						<div class="d-flex flex-column" style="width: 250px; height: 380px">
-							<div> <a href="/item/detail?itemNum=${vo.itemNum }">
-							<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px"></a> </div>
-
+						<c:if test="${vo.role eq 'VIP' }">
+							<div> <div style="position: relative;"><a href="/item/detail?itemNum=${vo.itemNum }">
+								<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px;"></a> 
+								<div style="position:absolute; top:0; right:0 "><img src="/images/vip.png" width="70px" style="padding: 5px 5px 0 0"></div></div>
+							</div>
+						</c:if>
+						<c:if test="${vo.role eq '모두' }">
+						<div><a href="/item/detail?itemNum=${vo.itemNum }">
+							<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px"></a></div>
+						</c:if>
 							<div class="d-flex flex-column" style="width: 250px; height: 130px">
 								<div class="d-flex justify-content-start pt-1" style="font-size: 14px">
 									<c:choose>
@@ -211,107 +313,28 @@
 				</c:forEach>
 			</div>
 		</div>
-		<!-- VIP전용 -->
-		<div style="background-color: #E8F5FF;">
-		<div class="container" style=" width:65%; padding-top: 4em; padding-bottom: 70px;">
-			<div class="d-flex justify-content-between">
-				<div style="height: 40px; font-size: 22px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 20px;">프리미엄 상품을 만나보세요</div>
-				<div class="more"><a href="./tab/tab4" style="text-decoration: none; color: black;"> 더보기 <i class="fa-solid fa-circle-chevron-right" style="color: rgb(130, 203, 41);"></i></a>
-				</div>
-			</div>
-			<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4"
-				style="height: 380px">
-				<c:forEach items="${listVIP }" var="vo">
-					<div>
-						<div class="d-flex flex-column" style="width: 250px; height: 380px">
-							<div> <a href="/item/detail?itemNum=${vo.itemNum }">
-							<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px"></a> </div>
-
-							<div class="d-flex flex-column" style="width: 250px; height: 130px">
-								<div class="d-flex justify-content-start pt-1" style="font-size: 14px">
-									<c:choose>
-										<c:when test="${vo.shop eq '쿠팡'}">
-											<div style="color: red">
-												<b>${vo.shop }</b>
-											</div>
-										</c:when>
-										<c:when test="${vo.shop eq '네이버'}">
-											<div style="color: #2DB400">
-												<b>${vo.shop }</b>
-											</div>
-										</c:when>
-										<c:when test="${vo.shop eq '인스타그램'}">
-											<div style="color: purple">
-												<b>${vo.shop }</b>
-											</div>
-										</c:when>
-										<c:otherwise>
-											<div style="color: #646464">
-												<b>${vo.shop }</b>
-											</div>
-										</c:otherwise>
-									</c:choose>
-									<span class="px-1" style="color: grey">|</span>
-									<div style="color: grey">${vo.sellerVO.company }</div>
-								</div>
-							</div>
-							<div class="my-1">
-								<p style="font-size: 16px; height: 50px; margin: 0; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-									<b>${vo.title }</b>
-								</p>
-							</div>
-							<div class="d-flex justify-content-start">
-								<div style="text-decoration: line-through; color: grey; font-size: 15px;" class="pe-2">
-									<b>${vo.price }원</b>
-								</div>
-
-								<c:if test="${vo.type eq 'SNS미션'}">
-									<div class="pe-1" style="color: gray; font-size: 14px; line-height: 23px">보상금액</div>
-									<div style="font-size: 18px; line-height: 22px; color: #FA6400">
-										<b><fmt:formatNumber type="number" maxFractionDigits="3" value="${vo.point }" />원</b>
-									</div>
-								</c:if>
-
-								<c:if test="${vo.type ne 'SNS미션'}">
-									<div class="pe-1" style="color: gray; font-size: 14px; line-height: 23px">실제구매가</div>
-									<div style="font-size: 18px; line-height: 22px; color: blue">
-										<b><fmt:formatNumber type="number" maxFractionDigits="3" value="${vo.price-vo.point }" />원</b>
-									</div>
-								</c:if>
-
-							</div>
-							<div class="d-flex justify-content-between">
-								<div style="font-size: 18px; color: blue">
-									<i class="fa-regular fa-clock"></i> 
-									<input type="hidden" value="${vo.date}" class="date"> 
-									<input type="hidden" value="${vo.count}" class="count"> 
-									<b class="time"></b>
-									<b><span class="hours"></span><span class="minutes"></span><span class="seconds"></span></b>
-								</div>
-								<div style="font-size: 12px; line-height: 28px; color: gray">마감임박</div>
-							</div>
-						</div>
-					</div>
-				</c:forEach>
-			</div>
-		</div>
-	</div>
-		<!-- ??? -->
+		
+		<!-- 당첨확률순 -->
 		<div class="container" style=" width:65%; padding-top: 4em; padding-bottom: 70px;">
 			<div class="d-flex justify-content-between">
 				<div style="height: 40px; font-size: 22px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 20px;">
-				마감 임박 캠페인, 놓치지 마세요? 지금 당첨 확률 높은 캠페인?</div>
-				<div class="more"> 더보기 <i class="fa-solid fa-circle-chevron-right" style="color: rgb(130, 203, 41)"></i>
-				</div>
+				당첨 확률 높은 캠페인</div>
 			</div>
 			<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4"
 				style="height: 380px">
-				<c:forEach items="${listHit }" var="vo">
+				<c:forEach items="${listSuccess }" var="vo">
 					<div>
 						<div class="d-flex flex-column" style="width: 250px; height: 380px">
-							<div><a href="/item/detail?itemNum=${vo.itemNum }">
-							 <img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px"></a> </div>
-
+						<c:if test="${vo.role eq 'VIP' }">
+							<div> <div style="position: relative;"><a href="/item/detail?itemNum=${vo.itemNum }">
+								<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px;"></a> 
+								<div style="position:absolute; top:0; right:0 "><img src="/images/vip.png" width="70px" style="padding: 5px 5px 0 0"></div></div>
+							</div>
+						</c:if>
+						<c:if test="${vo.role eq '모두' }">
+						<div><a href="/item/detail?itemNum=${vo.itemNum }">
+							<img src="/file/item/${vo.itemFileVOs[0].fileName}" style="width: 250px; height: 250px; border-radius: 15px"></a></div>
+						</c:if>
 							<div class="d-flex flex-column" style="width: 250px; height: 130px">
 								<div class="d-flex justify-content-start pt-1" style="font-size: 14px">
 									<c:choose>
@@ -380,23 +403,38 @@
 				</c:forEach>
 			</div>
 		</div>
-
 
 		<!-- 챗봇 -->
 		<div>
 			<div id="chat_ev" style="display: none">궁금한 부분 질문주세요!</div>
-			<a class="btn" id="chat_bot"> <img id="chat_img"
-				src="/images/16208041651620804165203.png" />
+			<a class="btn" id="chat_bot" onclick="new_window();"> <img id="chat_img"
+				src="/images/산타_구원이_(1).png"/>
 				<div class="pt-2">
 					<b>구디 챗봇</b>
-				</div> <span
-				class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-				style="font-size: 13px;">+0 <span class="visually-hidden">unread
-						messages</span></span></a>
+				</div></a>
 		</div>
 	
 		<c:import url="./template/footer.jsp"></c:import>
 	<script src="/js/index.js"></script>
 	<script src="/js/timer.js"></script>
+	<script type='text/javascript'>     
+    $(document).ready(function(){
+        $(document).snowfall({
+        	image : "images/flake.png", 
+        	minSize: 10,
+        	maxSize:32,
+        	flakeCount : 200
+         })
+    });
+ 	</script>
+ 	<script>
+      function new_window() {
+        window.open(
+          "/chat/chatbot",
+          "Child",
+          "width=450, height=550, top=100, left=1000"
+        );
+      }
+    </script>
 </body>
 </html>

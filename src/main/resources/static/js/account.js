@@ -3,13 +3,10 @@
 
 $("#seller_joinBtn").click(function () {
     let check;
-   if($("#id1").text() == ""){
-        console.log("로그인필요")
-        console.log($("#exampleModal"))
-        alert("로그인 필요")
+   if($("#memberId").text() == ""){
+        alert("로그인이 필요합니다.")
        $("#exampleModal").modal('show')
    }else{
-        console.log("로그인")
         $.ajax({
             type:"GET",
             url:"/seller/sellerCheck",
@@ -17,16 +14,38 @@ $("#seller_joinBtn").click(function () {
                 id:$("#memberId").text()
             },
             success:function(data){
-                console.log(typeof(data));
                 check = data
                 if(check){
-                    requestPay($("#memberName").text(), $("#memberId").text());
+                   alreadyPayCheck()
                 }
             }
         })
    }
 
   });
+
+function alreadyPayCheck(){
+    console.log("alreadyPayCheck")
+    console.log($("#memberId").text())
+    $.ajax({
+        type:"GET",
+        url:"/seller/alreadyPayCheck",
+        data:{
+            id:$("#memberId").text(),
+            payName:'ROLE_SELLER'
+        },
+        success:function(data){
+            console.log(data)
+            check = data
+            if(check){
+                requestPay($("#memberName").text(), $("#memberId").text());
+            }else{
+                alert("이미 결제했습니다")
+            }
+        }
+    })
+}
+
 
 
 function requestPay(buyer_name, buyer_id) {
@@ -38,7 +57,7 @@ function requestPay(buyer_name, buyer_id) {
         pg: "html5_inicis",
         pay_method: "card",
         merchant_uid: orderNum,
-        name: "판매자",
+        name: "ROLE_SELLER",
         amount: 100,
         buyer_name: buyer_name,
         // buyer_email: "gildong@gmail.com",
@@ -61,9 +80,10 @@ function requestPay(buyer_name, buyer_id) {
                 }
             }).done(function(data){
                 if(data==1){
-                    alert("결제 완료")
+					alert("결제 완료. 다시 로그인 해주세요.");
+                    location.href="/member/logout";   
                 }else{
-                    alert("결제 실패1")
+                    alert("결제 실패")
                 }
             })
             

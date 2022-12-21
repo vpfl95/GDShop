@@ -25,11 +25,19 @@ pageEncoding="UTF-8"%>
      <!-- include summernote css/js-->
 	 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 	 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+	 <style>
+      #notice_tab {
+        background-color: rgba(216, 246, 181, 0.803);
+        font-weight: 600;
+        cursor: pointer;
+        border-right: solid 3.5px green;
+      }
+    </style>
   </head>
   <body>
+    <c:import url="../template/top_part.jsp"></c:import>
+    <c:import url="../template/header.jsp"></c:import>
     <section class="container" style="width: 75%">
-      <c:import url="../template/top_part.jsp"></c:import>
-      <c:import url="../template/header.jsp"></c:import>
       
       <div class="container">
         <div class="content d-flex">
@@ -37,14 +45,10 @@ pageEncoding="UTF-8"%>
             <div style="height: 260px; width: 220px">
               <div class="list_top p-3 mt-4">고객센터</div>
               <ol class="list-group list-group-flush">
-                <li class="list-group-item">
+                <li class="list-group-item" id="notice_tab" onclick="location.href='/board/notice'">
                   <i class="fa-solid fa-headphones ps-2 pe-3"></i>공지사항
                 </li>
-                <li class="list-group-item">
-                  <i class="fa-solid fa-circle-question ps-2 pe-3"></i
-                  >자주묻는질문
-                </li>
-                <li class="list-group-item">
+                <li class="list-group-item" onclick="new_window();">
                   <i class="fa-solid fa-circle-info ps-2 pe-3"></i>1대 1문의
                 </li>
               </ol>
@@ -67,7 +71,7 @@ pageEncoding="UTF-8"%>
                 <!-- <div class="file_drag" id="file_drag" ondrop="drop(event)" ondragover="allowDrop(event)"> -->
                 <div class="file_drag" id="file_drag">
                
-	                  <div id="plz_drag"><i class="bi bi-plus-circle-dotted"></i> 파일을 마우스로 끌어 오세요</div>
+	                  <div id="plz_drag" style="font-weight: bold;"><i class="bi bi-file-plus"></i> 파일을 마우스로 끌어 오세요</div>
                  
 	                  <div class="file_list_header">
 	                    <div class="file_list_header_task">
@@ -115,5 +119,14 @@ pageEncoding="UTF-8"%>
       src="https://kit.fontawesome.com/6e23c67242.js"
       crossorigin="anonymous"
     ></script>
+    <script>
+      function new_window() {
+        window.open(
+          "/chat/chatbot",
+          "Child",
+          "width=450, height=550, top=100, left=1000"
+        );
+      }
+</script>
   </body>
 </html>

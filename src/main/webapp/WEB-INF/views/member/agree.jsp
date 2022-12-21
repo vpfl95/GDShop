@@ -123,7 +123,7 @@ prefix="c" %>
                 </div>
               </div>
               <div class="d-flex form-check justify-content-between">
-                <div>
+                <div style="width: 85%;">
                   <input
                     class="agree_check form-check-input"
                     type="checkbox"
@@ -145,7 +145,7 @@ prefix="c" %>
                 </div>
               </div>
               <div class="d-flex form-check justify-content-between">
-                <div>
+                <div style="width: 85%;">
                   <input
                     class="agree_check form-check-input"
                     type="checkbox"
@@ -154,7 +154,7 @@ prefix="c" %>
                   />
                   <label class="form-check-label" for="flexCheckChecked">
                     <b>(선택)</b>광고성 정보
-                    수신동의(앱알림,이메일,카카오알림톡,SMS/MMS)
+                    수신동의(앱알림, 이메일, 카카오알림톡, SMS/MMS)
                   </label>
                 </div>
                 <div
@@ -166,9 +166,6 @@ prefix="c" %>
                   보기
                 </div>
               </div>
-              <label class="form-check-label ps-4" for="flexCheckChecked">
-                ※ 구디샵은 만 14세 이상만 가입 가능합니다.
-              </label>
               <div class="mt-5 d-flex justify-content-end">
                 <form action="join" method="get" id="frm">
                   <button

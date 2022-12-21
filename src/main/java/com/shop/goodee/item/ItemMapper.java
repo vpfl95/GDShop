@@ -4,9 +4,15 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.shop.goodee.member.MemberVO;
+
 @Mapper
 public interface ItemMapper {
 
+	public int setDelRequest(ItemVO itemVO)throws Exception;
+	
+	public int setRequest(ItemVO itemVO)throws Exception;
+	
 	public int setAdd(ItemVO itemVO) throws Exception;
 
 	public int setAddFile(ItemFileVO itemFileVO) throws Exception;
@@ -21,14 +27,14 @@ public interface ItemMapper {
 	
 	public int setStatusDel(ItemVO itemVO) throws Exception;
 
-	public int setDelete(ItemVO itemVO) throws Exception;
-
 
 	public List<ItemVO> getList() throws Exception;
 
 	public List<ItemVO> getListHit() throws Exception;
 
 	public List<ItemVO> getListVIP() throws Exception;
+	
+	public List<ItemVO> getListSuccess() throws Exception;
 
 	public List<ItemVO> getList1() throws Exception;
 

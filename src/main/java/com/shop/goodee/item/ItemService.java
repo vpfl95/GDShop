@@ -24,6 +24,16 @@ public class ItemService {
 
 	@Value("${app.item}") // C:/gdshop/item/
 	private String path;
+	
+	//상품요청 승인,거절
+	public int setDelRequest(ItemVO itemVO)throws Exception{
+		return itemMapper.setDelRequest(itemVO);
+	}
+	
+	public int setRequest(ItemVO itemVO)throws Exception{
+		return itemMapper.setRequest(itemVO);
+	}
+	
 
 	// 상품등록
 	public int setAdd(ItemVO itemVO) throws Exception {
@@ -37,6 +47,7 @@ public class ItemService {
 		}
 
 		for (MultipartFile f : itemVO.getFiles()) {
+			log.info("getFiles()ㅡㅡㅡㅡ : {}", f);
 			if (!f.isEmpty()) {
 				log.info("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡfileName : {}", f.getOriginalFilename());
 				String fileName = fileManager.saveFile(f, path);
@@ -106,6 +117,10 @@ public class ItemService {
 
 	public List<ItemVO> getListVIP() throws Exception {
 		return itemMapper.getListVIP();
+	}
+	
+	public List<ItemVO> getListSuccess() throws Exception {
+		return itemMapper.getListSuccess();
 	}
 
 	public List<ItemVO> getList1() throws Exception {

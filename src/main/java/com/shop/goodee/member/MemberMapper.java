@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.shop.goodee.item.ItemVO;
 import com.shop.goodee.mission.MissionVO;
+import com.shop.goodee.pay.PayVO;
 
 @Mapper
 public interface MemberMapper {
@@ -110,5 +111,28 @@ public interface MemberMapper {
    
    /* 내 포인트 - 포인트 리스트 확인 */
    public List<PointVO> getPointList(MemberVO memberVO)throws Exception;
+   
+   /* 내 포인트 - 포인트 리스트 */
+   public List<PointVO> getPointScheduler(PointVO pointVO)throws Exception;
+   
+   /* 포인트 finish+1 */
+   public int setPointAdd()throws Exception;
+   
+   /* 멤버십 결제일,해지일 */
+   public PayVO getMembershipPay(PayVO payVO)throws Exception;
+   
+   /* pay 결제일,해지일 */
+   public List<PayVO> getPay(PayVO payVO)throws Exception;
+   
+   /* pay 결제일+1 */
+   public int setPayAdd()throws Exception;
+   
+   /* pay Delete */
+   public int setPayDelete(PayVO payVO)throws Exception;
+   
+   public String getPhone(String id)throws Exception;
+   
+   public int setMemberRoleDelete1(MemberVO memberVO)throws Exception;
+   public int setMemberRoleDelete2(MemberVO memberVO)throws Exception;
    
 }

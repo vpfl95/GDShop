@@ -59,18 +59,11 @@ pageEncoding="UTF-8"%>
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Seller</h1>
-                    </div>
-
-                    <!-- Content Row -->
-                    <c:import url="../admin/contentrow.jsp"></c:import>
-                    <!-- Content Row -->
+              
                  	<div style="margin-top: 3em; padding-bottom: 70px">
 
 			<div class="d-flex justify-content-center mt-4">
-				<div style="width: 100%; margin-bottom: 50px">
+				<div style="width: 90%; margin-bottom: 50px">
 					<h4>입점신청 현황</h4>
 
                                 <ul class="nav nav-tabs">
@@ -104,8 +97,8 @@ pageEncoding="UTF-8"%>
 									<td>${dto.phone}</td>
 									<td>${dto.company}</td>
 									<td>${dto.status}</td>
-									<td class="wait"><a href="#">O</a></td>
-									<td class="waitNo"><a href="#">X</a></td>
+									<td class="wait"><button href="#">승인</button></td>
+									<td class="waitNo"><button href="#">거절</button></td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -113,7 +106,7 @@ pageEncoding="UTF-8"%>
 
 					<div id="page">
 						<nav aria-label="Page navigation example">
-							<ul class="pagination">
+							<ul class="pagination justify-content-center">
 								<li class="page-item" value="${pager.pre}" id="pre"><a
 									class="page-link" href="./seller?wait=${pager.page-1}"
 									aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
@@ -122,7 +115,7 @@ pageEncoding="UTF-8"%>
 								<c:forEach var="i" begin="${pager.startNum}"
 									end="${pager.lastNum}">
 									<li class="page-item ${pager.page==i? 'active':''}"><a
-										class="page-link" href="./seller?wait=${i}">${i}</a></li>
+										class="page-link" href="./wait?page=${i}">${i}</a></li>
 								</c:forEach>
 
 								<li class="page-item ${pager.next?'':'disabled'}" id="next">
